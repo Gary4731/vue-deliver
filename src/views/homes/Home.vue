@@ -38,10 +38,9 @@
                     </div>
                 </div>
                 <van-tabs v-model:active="active" class="tabs">
-                    <van-tab v-for="(item, index) in centent_nav_list" :key = "index"
-                    :title = "item.tab">
-                <nav-list :navlist = "item.data"/>
-                </van-tab>
+                    <van-tab v-for="(item, index) in centent_nav_list" :key="index" :title="item.tab">
+                        <nav-list :navList="item.data" />
+                    </van-tab>
                 </van-tabs>
             </div>
         </div>
@@ -216,6 +215,7 @@ export default {
             active,
         };
     },
+    
 };
 </script>
 
@@ -323,14 +323,15 @@ export default {
                     }
                 }
             }
-            .tabs{
+
+            .tabs {
                 padding: 0px 20px 10px;
             }
         }
     }
 }
 
-/deep/ .van-tabs__wrap{
+/deep/ .van-tabs__wrap {
     border-radius: 10px;
 }
 </style>

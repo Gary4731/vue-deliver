@@ -1,6 +1,6 @@
 <template lang="">
     <div class ="item">
-        <img :src="itemContent.pic" />
+        <img :src="itemContent.pic" /> 
         <div class="item-des">
             <div class="title">{{itemContent.title}}</div>
             <div class="sales">{{itemContent.sales}}</div>
@@ -12,13 +12,14 @@
                 </div>
             </div>
         </div>
+    
     </div>
 </template>
+
 <script>
 export default {
     props: ["itemContent"],
+   
 };
 </script>
-<style lang="">
-    
-</style>
+
