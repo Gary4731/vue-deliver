@@ -1,7 +1,7 @@
 <template lang="">
     <div v-for="(item, index) in navList" :key="index">
        <nav-list-item :itemContent = "item"/>
-       {{item.label}}
+       <!-- {{item.label}} -->
     </div>
 </template>
 
