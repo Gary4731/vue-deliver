@@ -15,6 +15,14 @@
         </van-tabs>
       </div>
     </div>
+    <van-action-bar>
+  <van-action-bar-icon icon="chat-o" text="客服" dot />
+  <van-action-bar-icon icon="cart-o" text="购物车" :badge="store.state.cartList.length" 
+  @click = "goCart" />
+  <van-action-bar-button type="warning" text="加入购物车" @click = "handleAddCart" />
+  <van-action-bar-button type="danger" text="立即购买" 
+  @click = "toBuy"/>
+</van-action-bar>
   </div>
 </template>
 
@@ -22,12 +30,19 @@
 import Header from "../../components/Header.vue";
 import { reactive, toRefs } from "vue";
 import FoodList from "../store/components/FoodList.vue";
+import {useStore} from 'vuex';
+import { useRouter } from "vue-router";
+import { showToast } from "vant";
+
 export default {
   components: {
     Header,
     FoodList,
   },
   setup() {
+    let store = useStore();
+    let router = useRouter();
+
     let data = reactive({
       title: "Fish Soup",
       img: "https://img1.baidu.com/it/u=1599947592,1695977044&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=440",
@@ -38,7 +53,7 @@ export default {
             content: "点菜",
             items: [
               {
-                text: "热销套餐",
+                text: "Hot",
                 children: [
                   {
                     pic: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.cfcy168.com%2FUploadFiles%2F2020%2F2%2F15904074889874037.jpg&refer=http%3A%2F%2Fwww.cfcy168.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1645421933&t=66b58fbba9dce6f6b397e38820de24dc",
@@ -59,7 +74,7 @@ export default {
                 ],
               },
               {
-                text: "超级折扣",
+                text: "Deal",
                 children: [
                   {
                     pic: "https://img1.baidu.com/it/u=1599947592,1695977044&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=440",
@@ -97,8 +112,42 @@ export default {
       ],
     });
 
+    const handleAddCart =(type) =>{
+      const newList =[];
+      data.storeData.forEach(item=>{
+        item.data.items?.forEach(item=>{
+          item.children.forEach(item=>{
+            if(item.num >0)
+            {
+              newList.push(item);
+            }
+          })
+        })
+      })
+      if(newList.length === 0 )
+      {
+        //debugger;
+        showToast("Choose products!");
+        return;
+      }
+      store.commit('addCart', newList);
+      type ==="buy"? goCart():'';
+    };
+
+    const goCart = () =>{
+        router.push("/cart");
+    }
+
+    const toBuy =() =>{
+      handleAddCart('buy');
+    }
+
     return {
+      handleAddCart,
       ...toRefs(data),
+      store,
+      goCart,
+      toBuy,
     };
   },
 };
