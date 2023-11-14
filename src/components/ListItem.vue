@@ -1,6 +1,7 @@
 <template>
     <div class ="content-item">
         <div class="left">
+            <van-checkbox :name="item.id" v-if = "showCheckBox"/>
             <img :src="item.pic" />
         <div class="text">
             <div class="title">{{ item.title }}</div>           
@@ -18,7 +19,7 @@
 
 <script>
 export default{
-  props: ["item", "handleAdd", "handleChange"],
+  props: ["item", "handleAdd", "handleChange", "showCheckBox"],
 }
 </script>
 

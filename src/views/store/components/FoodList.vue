@@ -8,7 +8,7 @@
     >
       <template #content>
         <div v-for="(item, index) in subItem" class="item-bg">
-          <food-list-item :item="item" :handleAdd = "handleAdd"
+          <list-item :item="item" :handleAdd = "handleAdd"
           :handleChange = "handleChange"/>
         </div>
       </template>
@@ -21,11 +21,11 @@
 
 <script>
 import { reactive, toRefs } from 'vue';
-import FoodListItem from './FoodListItem.vue'
+import ListItem from '../../../components/ListItem.vue'
 export default{
     props: ["index", "foodData"],
     components: {
-      FoodListItem,
+      ListItem,
     },
     setup(props){
         let data = reactive({
