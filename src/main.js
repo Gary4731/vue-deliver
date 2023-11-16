@@ -3,13 +3,13 @@ import App from './App.vue'
 import './assets/reset.css'
 import 'amfe-flexible'
 import router from './router'
-import{ Button, Tabbar, TabbarItem, Icon} from 'vant'
+import{ Button, Tabbar, TabbarItem, Icon,Checkbox, CheckboxGroup, Locale} from 'vant'
 import store from './store'
 import 'vant/es/toast/style';
-import { Checkbox, CheckboxGroup } from 'vant';
-
+import enUS from 'vant/es/locale/lang/en-US';
 
 
 //import 'vant/lib/index.css'
 
 createApp(App).use(router).use(store).use(Checkbox).use(CheckboxGroup).use(Button).use(Tabbar).use(TabbarItem).use(Icon).mount('#app')
+Locale.use('en-US', enUS);

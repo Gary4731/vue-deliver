@@ -113,7 +113,7 @@ export default {
     });
 
     const handleAddCart =(type) =>{
-      const newList =[];
+      const newList = store.state.carList || [];
       data.storeData.forEach(item=>{
         item.data.items?.forEach(item=>{
           item.children.forEach(item=>{

@@ -54,6 +54,7 @@ const initData =()=>{
   initData();
  }
 
+ // add some products and change the number of products
  const handleAdd =(id) =>{
   data.subItem.forEach((item,index) =>{
     if(item.id === id)
@@ -64,6 +65,7 @@ const initData =()=>{
   })
  }
 
+ //handle the total of the item number and show
  const handleChange =(value, detail) =>{
   data.subItem.forEach(item =>{
     if(item.id ===detail.name){
