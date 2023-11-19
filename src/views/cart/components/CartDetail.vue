@@ -8,10 +8,20 @@
             </van-checkbox-group>
         </div>
         <van-submit-bar :price="totalPrice" currency ="$" button-text="Purchase" @submit="onSubmit" 
-        class = "submit-all">
+        class = "submit-all" v-if ="store.state.isDelete">
             <van-checkbox v-model="submitChecked" 
             @click ="chooseAll">All</van-checkbox>
         </van-submit-bar>
+
+        <div class="buy" v-else ="">
+            <div class="left">
+                <van-checkbox v-model="submitChecked" 
+            @click ="chooseAll">All</van-checkbox>
+            </div>
+            <div class="delete" @click = "handDelete">
+                Delete
+            </div>
+        </div>
     </div>
 </template>
 
@@ -19,12 +29,17 @@
 import { reactive, toRefs, onMounted, computed} from 'vue';
 import { useStore } from 'vuex';
 import ListItem from '../../../components/ListItem'
+import { showFailToast } from "vant";
+import { useRouter } from 'vue-router';
+
 export default {
+    props:['changeShow'],
     components: {
         ListItem,
     },
-    setup() {
+    setup(props) {
         const store = useStore();
+        const router = useRouter();
         const data = reactive({
             checked: [],
             submitChecked: true,
@@ -46,7 +61,13 @@ export default {
             init();
         });
         const onSubmit= () =>{
-
+            if(data.checked.length)
+            {
+                store.commit("pay", updateDate());
+                router.push("/createorder")
+            }else{
+                showFailToast("Please choose products!!!")
+            }
         }
 
         const chooseAll = ()=>{
@@ -58,9 +79,7 @@ export default {
         }
 
         const totalPrice = computed(()=>{
-            let count = store.state.cartList.filter((item) => {
-                return data.checked.includes(item.id);
-            })
+            let count = updateDate();
                 let sum =0;
                 count.forEach((item) => {
                     sum += item.num * item.price;
@@ -76,6 +95,29 @@ export default {
             }
             data.checked = result;
         }
+
+        //reverse, eg if you choose the product, it means you gonna delete it
+        //if the products are not be clicked then will keep into cart.
+        const updateDate = (type) =>{
+            return store.state.cartList.filter((item) => {
+                return type === 'delete' ? !data.checked.includes(item.id) :data.checked.includes(item.id);
+            })
+        }
+        const handDelete =() =>{
+            // part of delete or all delete
+            if(data.checked.length) {
+                store.commit("delete" , updateDate("delete"));
+                data.checked = [];
+                // if there is no product in cart
+                if(!store.state.cartList.length)
+                {
+                    props.changeShow();
+                }
+            }else{
+                showFailToast('Choose product to delete!');
+            }
+        }
+
         return {
             ...toRefs(data),
             store,
@@ -84,6 +126,7 @@ export default {
             chooseAll,
             groupChange,
             totalPrice,
+            handDelete,
         };
     }
 }
