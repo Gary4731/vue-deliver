@@ -64,7 +64,12 @@ export default {
             if(data.checked.length)
             {
                 store.commit("pay", updateDate());
-                router.push("/createorder")
+                router.push({
+                    path: "/createorder",
+                    query:{
+                        list:data.checked
+                    }
+                })
             }else{
                 showFailToast("Please choose products!!!")
             }

@@ -3,9 +3,10 @@ import App from './App.vue'
 import './assets/reset.css'
 import 'amfe-flexible'
 import router from './router'
-import{ Button, Tabbar, TabbarItem, Icon,Checkbox, CheckboxGroup, Locale} from 'vant'
+import{ Button, Tabbar, TabbarItem, Icon,Checkbox, CheckboxGroup, Locale, Dialog} from 'vant'
 import store from './store'
 import 'vant/es/toast/style';
+import 'vant/es/dialog/style';
 import enUS from 'vant/es/locale/lang/en-US';
 
 

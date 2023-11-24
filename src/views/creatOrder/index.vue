@@ -1,30 +1,32 @@
-<template>   
-        <div class="create-order">
-            <Header title="Order"></Header>
-            <van-contact-card type="edit" :tel="tel" :name="name" @click="onEdit" />
-            <div class="content">
-                <div v-for="(item, index) in store.state.orderList">
-                    <van-card :num="item.num" :price="item.price" currency ="$" :title="item.title" :thumb="item.pic" />
-                </div>
-            </div>
-            <div class="pay-wrap">
-                <div class="price">
-                    <span>
-                        Price
-                    </span>
-                    <span>
-                        ${{totalPrice}}
-                    </span>
-                </div>
-                <van-button type="primary" class = "pay-btn" block>Creat order</van-button>
+<template>
+    <div class="create-order">
+        <Header title="Order"></Header>
+        <van-contact-card type="edit" :tel="tel" :name="name"  />
+        <div class="content">
+            <div v-for="(item, index) in store.state.orderList">
+                <van-card :num="item.num" :price="item.price" currency="$" :title="item.title" :thumb="item.pic" />
             </div>
         </div>
+        <div class="pay-wrap">
+            <div class="price">
+                <span>
+                    Price
+                </span>
+                <span>
+                    ${{ totalPrice }}
+                </span>
+            </div>
+            <van-button type="primary" class="pay-btn" block @click="handCreatOrder">Creat order</van-button>
+        </div>
+    </div>
 </template>
 
 <script>
 import Header from '../../components/Header';
+import { showDialog } from 'vant';
 import { reactive, toRefs, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
 
 export default {
     components: {
@@ -38,17 +40,30 @@ export default {
         })
 
         const store = useStore();
-        const onEdit = () => {
+        const router = useRouter();
+        const route = useRoute();
+        //const onEdit = () => {}
 
+        const handCreatOrder = () => {
+            showDialog({ message: 'Successful' })
+            .then(()=>{
+                //connect with cart and delete choosen items
+                let newList = store.state.cartList.filter(item => {
+                    return !route.query.list.includes(item.id + "")
+                })
+                store.commit('delete', newList)
+                store.commit('orderEnd', newList)
+             router.push('/order')
+            });
         }
-        const initPrice= () =>{
+
+        const initPrice = () => {
             let price = 0;
-            if(store.state.orderList.length)
-            {
-                store.state.orderList.forEach((item)=>{
+            if (store.state.orderList.length) {
+                store.state.orderList.forEach((item) => {
                     price += item.num * item.price;
                 })
-                
+
             }
             data.totalPrice = price;
         }
@@ -58,8 +73,9 @@ export default {
         });
         return {
             ...toRefs(data),
-            onEdit,
+            //onEdit,
             store,
+            handCreatOrder,
         }
     }
 }
